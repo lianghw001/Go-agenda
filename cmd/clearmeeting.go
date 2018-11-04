@@ -31,8 +31,10 @@ var info_show bool
 var clearmeetingCmd = &cobra.Command{
 	Use:   "clearmeeting",
 	Short: "Current user can clear meetings which he sponsors",
-	Long: `Current user can clear all meetings that he sponsors. For example:
-clearmeeting -i clear all meetings and print titles of meeting being deleted`,
+	Long: `clearmeeting:Current user can clear all meetings that he sponsors and see the details of the cleanup.
+		For example:
+		agenda clearmeeting -i 
+		clear all meetings and print titles of meeting being deleted`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//log
 		fileName := "datarw/Agenda.log"
@@ -42,7 +44,6 @@ clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 			log.Fatalln("Open file error")
 		}
 		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
-		infoLog.Println("Cmd clearmeeting called")
 
 		var delete_meetings []string
 		//get current user
@@ -55,6 +56,7 @@ clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 			fmt.Println("Cmd clearmeeting failed")
 			return
 		}
+		infoLog.Println("Current User: " + current_user.Name + ", Cmd clearmeeting called")
 		//get all existed meetings
 		meetings := datarw.GetMeetings()
 		//meetings after delete
@@ -73,7 +75,7 @@ clearmeeting -i clear all meetings and print titles of meeting being deleted`,
 			}
 		}
 		infoLog.SetPrefix("[Info]")
-		infoLog.Println("Cmd clearmeeting finished")
+		infoLog.Println("Current User: " + current_user.Name + ", Cmd clearmeeting finished")
 		fmt.Println("clearmeeting finished")
 
 	},

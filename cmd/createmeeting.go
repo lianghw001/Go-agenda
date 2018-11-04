@@ -37,9 +37,10 @@ var (
 var createmeetingCmd = &cobra.Command{
 	Use:   "createmeeting",
 	Short: "Create a meeting",
-	Long: `Current user can create a meeting. You should provide meeting title, start date and end date of this meeting
-and all participators. For example:
-createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`,
+	Long: `createmeeting:Current user can create a meeting. You should provide meeting title, start date and end date of this meeting
+and all participators. 
+	For example:
+	agenda createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`,
 	Run: func(cmd *cobra.Command, args []string) {
 		//log
 		fileName := "datarw/Agenda.log"
@@ -49,7 +50,6 @@ createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`
 			log.Fatalln("Open file error")
 		}
 		infoLog := log.New(logFile, "[Info]", log.Ldate|log.Ltime|log.Lshortfile)
-		infoLog.Println("Cmd createmeeting called")
 
 		current_user := datarw.GetCurUser()
 		if current_user == nil {
@@ -60,6 +60,8 @@ createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`
 			fmt.Println("createmeeting failed")
 			return
 		}
+		infoLog.Println("Current User: " + current_user.Name + ", Cmd createmeeting called")
+
 		sponsor_name = current_user.Name
 		meetings := datarw.GetMeetings()
 		users := datarw.GetUsers()
@@ -71,7 +73,7 @@ createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`
 			infoLog.SetPrefix("[Error]")
 			infoLog.Println("Wrong date format")
 			fmt.Println("Wrong date format. Should be Year-Month-Day-Hour-Minute")
-			infoLog.Println("Cmd createmeeting failed")
+			infoLog.Println("Current User: " + current_user.Name + ", Cmd createmeeting failed")
 			fmt.Println("createmeeting failed")
 			return
 		} else {
@@ -83,7 +85,7 @@ createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`
 				infoLog.SetPrefix("[Error]")
 				infoLog.Println("Wrong date format")
 				fmt.Println("Wrong date format. Should be Year-Month-Day-Hour-Minute")
-				infoLog.Println("Cmd createmeeting failed")
+				infoLog.Println("Current User: " + current_user.Name + ", Cmd createmeeting failed")
 				fmt.Println("createmeeting failed")
 				return
 			}
@@ -95,7 +97,7 @@ createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`
 			infoLog.SetPrefix("[Error]")
 			infoLog.Println("Sponsor not free")
 			fmt.Println("Sponsor is not free")
-			infoLog.Println("Cmd createmeeting failed")
+			infoLog.Println("Current User: " + current_user.Name + ", Cmd createmeeting failed")
 			fmt.Println("createmeeting failed")
 			return
 		}
@@ -111,7 +113,7 @@ createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`
 			meetings = append(meetings, new_meeting)
 			datarw.SaveMeetings(meetings)
 			infoLog.SetPrefix("[Info]")
-			infoLog.Println("Cmd createmeeting finished")
+			infoLog.Println("Current User: " + current_user.Name + ", Cmd createmeeting finished")
 			fmt.Println("createmeeting finished")
 		} else {
 			if !entity.Check_title(create_meeting_title, meetings) {
@@ -130,7 +132,7 @@ createmeeting -t=new_meeting -s=2007-8-3-13-42 -e=2007-8-3-15-42 -p=xxx-xxx-xxx`
 				fmt.Println("No valid participators (busy or not exists)")
 			}
 			infoLog.SetPrefix("[Error]")
-			infoLog.Println("Cmd createmeeting failed")
+			infoLog.Println("Current User: " + current_user.Name + ", Cmd createmeeting failed")
 			fmt.Println("createmeeting failed")
 		}
 
